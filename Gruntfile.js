@@ -1,8 +1,20 @@
-
-'use strict';
+"use strict";
 
 module.exports = function(grunt) {
   grunt.initConfig({
+    jsbeautifier:{
+      src: {
+        src:['throu.js']
+      }
+    },
+    jshint: {
+      all: [
+        "Gruntfile.js", "throu.js", "test/**/*.js"
+      ],
+      options: {
+        jshintrc: '.jshintrc'
+      }
+    },
     connect:{
       test:{
         options:{
@@ -25,6 +37,9 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-jsbeautifier');
 
   grunt.registerTask('mtest', ['copy:testrun', 'connect:test']);
 };

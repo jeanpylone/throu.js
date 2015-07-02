@@ -4,65 +4,92 @@
     <meta charset="UTF-8">
     <title></title>
     <style>
-        .lvl {
-            padding-left: 20px;
+        .lvl {position:absolute;
+            left: 20px;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 </head>
 <body>
 <script src="throu.js"></script>
 <script>
-    var runi = function(i, flat){
-        $.get('sample'+i+'.json').done(function (data) {
-            var c= 0,a= 0, tw = 0, th = 0;
-            var d = new Date().getTime();
-            var t = !flat ? new Throu(data):new ThrouFlat(data);
-            console.log(!flat?"dynamic":"flat",i, a, 'data all items: ' + (new Date().getTime() - d) + "ms");
-            t.beforePass(function(pass){
-console.time(pass);
-            });
-            t.afterPass(function(pass){
-                console.timeEnd(pass);
-            });
-            t.pass(function (item, parent) {
-                a++;
-                if(parent) {
-                    item.level = parent.level + 1;
-                } else {
-                    item.level = 0;
+    var runi = function(i, callback, flat){
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState==4 && httpRequest.status==200) {
+                var data = JSON.parse(httpRequest.responseText);
+                var c = 0, a = 0, tw = 0, th = 0;
+                var d = new Date().getTime();
+                var t = !flat ? new Throu(data) : new ThrouFlat(data);
+                console.log(!flat ? "dynamic" : "flat", i, a, 'data all items: ' + (new Date().getTime() - d) + "ms");
+                t.beforePass(function (pass) {
+                    console.time(pass);
+                });
+                t.afterPass(function (pass) {
+                    console.timeEnd(pass);
+                });
+                t.pass(function (item, parent) {
+                    a++;
+                    if (parent) {
+                        item.level = parent.level + 1;
+                    } else {
+                        item.level = 0;
+                    }
+                    item.id = item.id || ('d_' + i + (flat ? 'f' : 'd')) + (c++);
+                });
+                t.pass(function (item, parent) {
+                    var text = document.createElement('span');
+                    text.textContent = item.firstname + " " + item.lastname;
+                    var ditem = document.createElement('div');
+                    ditem.id = item.id;
+                    ditem.appendChild(text);
+                    item.dom = ditem;
+                });
+                t.pass(function (item, parent) {
+                    (parent ? parent.dom : document.body).appendChild(item.dom);
+                }, true);
+                t.pass(function (item, parent) {
+                    item.dom.classList.add('lvl');
+                    item.dom.classList.add('lvl_' + item.level);
+                });
+                t.pass(function (item, parent) {
+                    tw += item.dom.clientWidth;
+                    th += item.dom.clientHeight;
+                });
+                t.run();
+                console.log(!flat ? "dynamic" : "flat", i, a, 'all items: ' + (new Date().getTime() - d) + "ms", tw, th);
+                if (callback){
+                    callback();
                 }
-                item.id = item.id || ('d_' + i + (flat?'f':'d')) + (c++);
-            });
-            t.pass(function (item, parent) {
-                var text = document.createElement('span');
-                text.textContent = item.firstname + " " + item.lastname;
-                var ditem = document.createElement('div');
-                ditem.id  = item.id;
-                ditem.appendChild(text);
-                item.dom = ditem;
-            });
-            t.pass(function (item, parent) {
-                (parent ? parent.dom : document.body).appendChild(item.dom);
-            }, true);
-            t.pass(function (item, parent) {
-                item.dom.classList.add('lvl');
-                item.dom.classList.add('lvl_'+item.level);
-            });
-            t.pass(function (item, parent) {
-                tw+= item.dom.clientWidth;
-                th+= item.dom.clientHeight;
-            });
-            t.run();
-            console.log(!flat?"dynamic":"flat",i, a, 'all items: ' + (new Date().getTime() - d) + "ms", tw, th);
+            }
+        };
+        httpRequest.open('GET', 'sample'+i+'.json');
+        httpRequest.send();
+    };
+    var runF = function(count){
+        runi(count, function(){
+            document.body.innerHTML = "";
+            if (count>1) {
+                runF(count - 1);
+            }
+        }, true);
+    };
+    var runD = function(count){
+        runi(count, function(){
+            document.body.innerHTML = "";
+            if (count>1) {
+                runD(count - 1);
+            } else {
+                runF(4);
+            }
         });
     };
-    for(var i = 1; i<6;i++) {
+    runD(4);
+/*    for(var i = 1; i<6;i++) {
         runi(i);
     }
     for(var i = 1; i<6;i++) {
         runi(i, true);
-    }
+    }*/
 </script>
 </body>
 </html>
