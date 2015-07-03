@@ -15,6 +15,14 @@ module.exports = function(grunt) {
         jshintrc: '.jshintrc'
       }
     },
+    jasmine: {
+      throu: {
+        src: 'throu.js',
+        options: {
+          specs: 'test/spec/*Spec.js'
+        }
+      }
+    },
     connect:{
       test:{
         options:{
@@ -39,7 +47,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-jsbeautifier');
 
   grunt.registerTask('mtest', ['copy:testrun', 'connect:test']);
+  grunt.registerTask('test', ['jasmine:throu']);
 };

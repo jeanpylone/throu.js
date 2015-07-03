@@ -5,7 +5,6 @@
         return item.children;
     };
 
-
     var Throu = function(data) {
         this._data = data;
         this._childrenSelector = defaultChildrenSelector;
@@ -16,6 +15,9 @@
     Throu.prototype = {
         setChildrenSelector: function(selector) {
             this._childrenSelector = selector;
+        },
+        setData: function(data) {
+            this._data = data;
         },
         pass: function(pass, childrenFirst) {
             this._passes.push({
@@ -77,7 +79,7 @@
             this._refreshFlattened();
         },
         _runFlatten: function(parent, flat) {
-            var children = this._childrenSelector(parent);
+            var children = this._childrenSelector(parent) || [];
             for (var i = 0; i < children.length; i++) {
                 flat.push({
                     item: children[i],
@@ -88,11 +90,17 @@
         },
         _refreshFlattened: function() {
             this._flattened.length = 0;
-            this._flattened.push({
-                item: this._data,
-                parent: null
-            });
-            this._runFlatten(this._data, this._flattened);
+            if (this._data) {
+                this._flattened.push({
+                    item: this._data,
+                    parent: null
+                });
+                this._runFlatten(this._data, this._flattened);
+            }
+        },
+        setData: function(data) {
+            this._data = data;
+            this._refreshFlattened();
         },
         pass: function(pass, childrenFirst) {
             this._passes.push({
