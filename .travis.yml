@@ -14,4 +14,5 @@ deploy:
     secure: ow8uiRVasZc+pRq+//WjajqtiW+8oTTNRnxXQD0KSIieNcZStHqBsQymqHX6/Ua9JCNtqyVtNV2VBRuD05bC0DeaOaBxWrkYAaHXsbKE+BWhaxEdPl/dWwdIH9PI5HVb/1JCkjorbsWkqUpbzcr8dHQUbE5z0KDuk20LxOExaJnb3qWnTeRTJfiqqXRRv2KdKlqFUR0jXuNucM529W4Ef5pJrXbUX5s7Fj+CYtZ4oMhCPqll/oV0u+LzJkYp+SlbBEzem87RAy2SxTqcf66zM0YXCkvRxVKvH0DyvSXn0XMWp1k3UYKFA+Jq89guNmuN8RZAuZbJB5GTh0Gel1nLv012DNscwj5pLuw0wftSht0GKSmW2i2VYqS4gt2XMuI8HPqV3OEHNmS0rsnUq2jyrzB2uwxuTDkVBGT+f5I/F4gXPbOf/RjJPTkLWVDnwDMd3/YkfHYrTz1fHk/cqoZ0rGCuIgwnhj8IYQe95Fh0gyMLsArIiws3+7hLmOg6orV5ey9KtN0rVOxCCqHf69pJpp/Dlk0duqgUKKrjdDmVLdSa2nNR3NnL/d3Hg1Vp3enDxc4epCuNe9QPpO5CE/p19VVdAHKXqq8C0cgUt10niwN78Q9sIFLoR2PGI0XBJxHSctBkfWLoHmECutkn4gk2kq9xpJW8wjA6B/MHpEFCv+A=
   on:
     tags: true
+    node: '0.12'
     repo: jeanpylone/throu.js
